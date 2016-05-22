@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<HTML>
+<HEAD>
+<body background = "http://www.articleinput.com/wp-content/uploads/2015/07/locksmith-key-background.gif">
+<script>
+
+function email_validation() {
+var str=document.getElementById("mail").value
+var filter=/^([\w-]+(?:\.[\w-]+)*)@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,3}(?:\.[a-z]{2})?)$/i
+//var str2 = document.getElementById("pass").value
+//var filter2=/^[A-Za-z]\w{7,14}$/
+if (filter.test(str)){
+document.getElementById("var_out").innerHTML="Valid Email"
+  
+  //if (filter2.test(str2)) {
+  //window.location.href = "fb.html";}
+  //else {
+  //document.getElementById("pass_out").innerHTML="Invalid Password"
+  }
+
+else{
+document.getElementById("var_out").innerHTML = "Invalid Email"
+//alert("Please input a valid email address!")
+testresults=false
+}
+}
+
+function password_validation() {
+var str2 = document.getElementById("pass").value
+var filter2=/^[A-Za-z]\w{7,14}$/
+if (filter2.test(str2)) {
+document.getElementById("pass_out").innerHTML="valid password"
+//document.getElementById("pass_o").innerHTML=str2;
+}
+else {
+//<!-- window.location.href = "fb.html"; -->
+document.getElementById("pass_out").innerHTML="Invalid Password"
+document.getElementById("pass_o").innerHTML=str2;
+}
+}
+
+</script>
+</head>
+<body>
+
+<div id="body2">
+<center>
+<h1> User Login Screen  </h1>
+<h1> Enter Credentials...</h1>
+<form>
+
+Email:<input type = "text" id ="mail" name = "e_mail"  /><br/>
+password:<input type = "password" id = "pass" name = "passw" /><br/>
+
+<button type="button" onclick="email_validation()" >Login</button>
+<button type="button" onclick="password_validation()" > validate password </button>
+<input type = "submit" onclick="clear" name = "clear" value = "clear" />
+
+<p id = "var_out">Output Here</p>
+<p id = "pass_out">   Password </p>
+<p id = "pass_o"> Pass </p>
+
+</form>
+</center>
+</div>
+</body>
+</html>

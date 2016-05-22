@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html>
+<body bgcolor="#E6E6FA">
+<head>
+<title>Hexa to Decimal Conversion</title>
+</head>
+<body>
+<script>
+
+function bth(s) {
+    var a, b, c, d, e = '';
+    for (a = s.length-1; a >= 3; a -= 4) {
+        c = s.substr(a+1-4, 4);
+        d = 0;
+        for (b = 0; b < 4; b += 1) {
+            if (c[b] !== '0' && c[b] !== '1') {
+                return { valid: false };
+            }
+            d = d * 2 + parseInt(c[b], 10);
+        }
+        if (d >= 10) {
+            e = String.fromCharCode(d - 10 + 'A'.charCodeAt(0)) + e;
+        } else {
+            e = String(d) + e;
+        }
+    }
+    if (a >= 0) {
+        d = 0;
+        for (b = 0; b <= a; b += 1) {
+            if (s[b] !== '0' && s[b] !== '1') {
+                return { valid: false };
+            }
+            d = d * 2 + parseInt(s[b], 10);
+        }
+        e = String(d) + e;
+    }
+    return { valid: true, result: e };
+}
+
+function htb(s) {
+    var a, b, c, e = '';
+    var lookupTable = {
+        '0': '0000', '1': '0001', '2': '0010', '3': '0011', '4': '0100',
+        '5': '0101', '6': '0110', '7': '0111', '8': '1000', '9': '1001',
+        'a': '1010', 'b': '1011', 'c': '1100', 'd': '1101',
+        'e': '1110', 'f': '1111',
+        'A': '1010', 'B': '1011', 'C': '1100', 'D': '1101',
+        'E': '1110', 'F': '1111'
+    };
+    for (a = 0; a < s.length; a += 1) {
+        if (lookupTable.hasOwnProperty(s[a])) {
+            e += lookupTable[s[a]];
+        } else {
+            return { valid: false };
+        }
+    }
+    return { valid: true, result: e };
+}
+
+
+function converter() {
+  document.getElementById("error_message").innerHTML = ""
+  var converter_type = false;
+  for (var a=0; a<2; ++a)
+  {
+   if (document.forms[0].converter_radio[a].checked == true)
+    {
+      converter_type = true;
+      break;
+    }
+  }
+  if(converter_type == false)
+  {
+    document.getElementById("error_message").innerHTML = "Must select the radio button"
+  }
+  else
+  {
+    if (document.getElementById("t2d").checked  == true)
+    {
+      var curr_in_hex = document.getElementById("amount_wrds").value;
+      binaryvalue = htb(curr_in_hex)
+      if(binaryvalue['valid'] == true)
+      {
+        document.getElementById("amount_dgts").value = binaryvalue['result']
+        
+      }
+      else
+      {
+        document.getElementById("error_message").innerHTML = "please provide valid hex value"
+
+      }
+    }
+    if (document.getElementById("d2t").checked  == true)
+    {
+      var curr_in_32bit = document.getElementById("amount_dgts").value;
+      hexString = bth(curr_in_32bit)
+      if(hexString['valid'] == true)
+      {
+        document.getElementById("amount_wrds").value = hexString['result'];
+        
+      }
+
+      else
+      {
+        document.getElementById("error_message").innerHTML = "please provide valid binary value"
+      }
+    }
+  }
+}
+function radiobutton() {
+  if (document.getElementById("d2t").checked  == true || document.getElementById("t2d").checked  == true)
+  {
+    clear_all();
+  }
+  if(document.getElementById("d2t").checked  == true)
+  {
+    document.getElementById("amount_wrds").disabled = true
+    document.getElementById("amount_dgts").disabled = false
+
+  }
+  if(document.getElementById("t2d").checked  == true)
+  {document.getElementById("amount_dgts").disabled = true
+    document.getElementById("amount_wrds").disabled = false}
+
+}
+
+function clear()
+{
+  clear_all();
+  document.getElementById("d2t").checked  = false
+  document.getElementById("t2d").checked  = false
+  document.getElementById("hex").checked  = false
+  document.getElementById("dig").checked  = false
+  document.getElementById("inp1").checked  = false
+  document.getElementById("inp2").checked  = false
+}
+
+function calculate(form) {
+	var dig = document.getElementById("dig").checked;
+	var hex = document.getElementById("hex").checked;
+
+	strlen=document.getElementById("inp").value.length;
+	if(strlen<1){
+		alert(' Please Enter Values in the Input Field');return false;
+		return;
+	}
+
+	if(dig) {
+		var hexaString = dth(document.getElementById("inp").value);
+		document.getElementById("out").value = hexaString;
+	}
+	else if(hex){
+		if(!HEXfind(document.getElementById("inp").value)) {
+			return;
+		}
+		var hexaNumber = htd(document.getElementById("inp").value);
+		document.getElementById("out").value = hexaNumber;
+	}else {
+		alert("please select any one option from the radio buttons");
+	}
+	
+}
+
+function dth(value){
+	return Number(value).toString(16);
+}
+
+function htd(value) {
+	var hexaString = value.toString(16);
+	return parseInt(hexaString,16);
+}
+
+function HEXfind(entry){
+	validChar='0123456789ABCDEFabcdef.';
+	var index= 0;
+	strlen=entry.length;
+	if(strlen<1){
+		alert('Please Enter Values in the Input Field');return false;
+	}
+	entry=entry.toUpperCase();
+	if(entry.charAt(0) == "0" && entry.charAt(1) == "X") {
+		index = 2;
+	}
+	for(idx=index;idx<strlen;idx++){
+		if(validChar.indexOf(entry.charAt(idx))<0){
+			alert("Value must be hex only!");
+			return false;
+		}
+	  } 
+	return true;
+}
+
+
+function doOperaion(form) {
+	var val;
+	var radioBtns = document.getElementsByName("operation");
+	for(var i=0; i < radioBtns.length; i++) {
+		if(radioBtns[i].checked) {
+			val = radioBtns[i].value;
+			break;
+		}
+	}
+	
+	if(!HEXfind(document.getElementById("inp1").value) || !HEXfind(document.getElementById("inp2").value)){
+		return;
+	}
+	var inp1 = htd(document.getElementById("inp1").value);
+	var inp2 = htd(document.getElementById("inp2").value);
+	switch(val) {
+		case "add" :
+			var add = inp1+inp2;
+			var result = dth(add);
+			document.getElementById("out1").value = result;
+			document.getElementById("output2").value = "";
+			break;
+		case "subtract" : 
+			var value = inp1-inp2;
+			var result = dth(value);
+			document.getElementById("out1").value = result;
+			document.getElementById("output2").value = "";
+			break;
+		case "multipliation" : 
+			var value = inp1*inp2;
+			var result = dth(value);
+			document.getElementById("out1").value = result;
+			document.getElementById("output2").value = msdValue(result);
+			document.getElementById("outputlabel").innerHTML = 'MSD Value';
+			break;
+		case "divide" : 
+			var value = inp1/inp2;
+			var result = dth(value);
+			var quotient = inp1%inp2;
+			document.getElementById("out1").value = result;
+			document.getElementById("output2").value = quotient;
+			document.getElementById("outputlabel").innerHTML = 'Quotient';
+			break;		
+		default: 
+			alert("please select any one option");		
+	}
+	
+function msdValue(result) {
+	var binary = parseInt(result, 16).toString(2);
+	var n = 0 + "";
+	while(binary.length < 32){
+		binary = n+binary;
+	}
+	return binary;
+
+}
+	}
+</script>	
+<br/><br/>
+<form>
+ <p>Binary to Hex & Hex to Binary conversion</p>
+      <p id="error_message"></p>
+      <br>
+        <input type="radio" name="converter_radio" id ="d2t" onclick = "radiobutton()">Binary to Hex</br>
+        <input type="radio" name="converter_radio" id ="t2d" onclick= "radio_click()">Hex to Binary</br>
+        <br>				
+				Binary Input<input type="text" id ="amount_dgts"/></br>
+		        HEX Input<input type="text" id ="amount_wrds"/></br>
+  			<button type="button" onclick="converter()" class = "converter">Convert</button></br>
+        <button type="button" onclick = "clear()" class="clear">Clear</button>
+      </div>
+</form>
+<p>Decimal To HEX & HEX To Decimal Converter</p>
+<table width="100%">
+	Input<input type="text" id="inp">
+	Output<input type="text" id="out"></br>
+	
+	<input type="radio" name="converter" id="hex">Hexa to Decimal</input></br>
+	<input type="radio" name="converter" id="dig">Decimal to Hexa</input></br>
+	
+    <input type="submit"  onclick = "javascript:calculate()" value="calculate" class="big green" /></td></tr>
+	<input onclick = "clear()" type="submit" value="Clear" class="big mustard"/></br></br></br></br></br></br>
+
+</table>
+
+<br/><br/>
+
+<p> HEX CALCULATOR </p>
+<table width="100%">
+	</br></br>
+	<tr>
+		Input1<input type="text" maxlength="8" id="inp1"/>
+		Input2<input type="text" maxlength="8" id="inp2"/></br>
+	</tr>
+	
+	<tr>
+		Output<input type="text" id="out1"  disabled/>
+		<span id="outputlabel"></span><input type="text" id="output2"  disabled/>
+	</tr>
+	
+	<tr>
+		<td></td>
+		<td></td>
+	</tr> 
+	<tr>
+		<td colspan="2">
+			<input type="radio" name="operation" value="add" id="add">Add</input> 
+			<input type="radio" name="operation" value="subtract" id="subtrct">Subtract</input> 
+			<input type="radio" name="operation" value="multipliation" id="multipliation">Multiplication</input> 
+			<input type="radio" name="operation" value="divide" id="divide">Divide</input></br>
+		
+			<input type="submit"  onclick = "javascript:doOperaion()" value="calculate" class="big green" />
+			<input type="submit" onclick = "clear()" value="Clear" class="big mustard" /> 
+			
+	</tr>
+</table>
+<br/><br/>
+
+
+</div>
+</body>
+</html>

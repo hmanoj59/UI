@@ -1,0 +1,128 @@
+<!DOCTYPE html PUBl
+<html xmlns="http://www.w3.org/1999/xhtml"><head>
+<link rel="stylesheet" type="text/css" href="style.css">
+<title> Count Down Timer</title>
+</head>
+
+<body>
+<body background="http://shenews.nl/wp-content/uploads/2013/06/Stopwatch.jpg" height="42" width="42">
+</body>
+</html>
+
+<br>
+<p><font size="6" color="blue">Count Down Timer </font></p>
+<div style="text-align: center;">
+    <div style="margin-left: auto; margin-right: auto; text-align: center; position: relative; ">
+        <div id="count"></div>
+    </div>
+</div>
+
+<script>
+
+var current="invalid";      
+var year = 2015 ;        
+var month=08;          
+var day=15;           
+var hour=05;          
+var minute=45;        
+var tz=-5;           
+ 4var montharray=new Array("Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec");
+
+function countdown(yr,m,d,hr,min,sec){
+theyear=yr;themonth=m;theday=d;thehour=hr;theminute=min;thesecond=sec;
+var today=new Date();
+var todayy=today.getYear();         
+if (todayy < 1000) {
+todayy+=1900; }
+var todaym=today.getMonth();
+var todayd=today.getDate();
+var todayh=today.getHours();
+var todaymin=today.getMinutes();
+var todaysec=today.getSeconds();
+var todaystring1=montharray[todaym]+" "+todayd+", "+todayy+" "+todayh+":"+todaymin+":"+todaysec;
+var todaystring=Date.parse(todaystring1)+(tz*1000*60*60);
+var futurestring1=(montharray[m-1]+" "+d+", "+yr+" "+hr+":"+min);
+var futurestring=Date.parse(futurestring1)-(today.getTimezoneOffset()*(1000*60));
+var dd=futurestring-todaystring;
+var dday=Math.floor(dd/(60*60*1000*24)*1);
+var dhour=Math.floor((dd%(60*60*1000*24))/(60*60*1000)*1);
+var dmin=Math.floor(((dd%(60*60*1000*24))%(60*60*1000))/(60*1000)*1);
+var dsec=Math.floor((((dd%(60*60*1000*24))%(60*60*1000))%(60*1000))/1000*1);
+if(dday<=0&&dhour<=0&&dmin<=0&&dsec<=0){
+document.getElementById('count').innerHTML=current;
+return;
+}
+else {
+document.getElementById('count').innerHTML=+dday+ " days, "+dhour+" hours, "+dmin+" minutes, and "+dsec+" seconds";
+setTimeout("countdown(theyear,themonth,theday,thehour,theminute)",1000);
+}
+}
+
+countdown(year,month,day,hour,minute);
+
+</script>
+<div>
+<br>
+<br>
+<br>
+
+Hours: <input type = "text" id = "hr" name = "hr" value = "0" size = "2" maxlength = "2"/> Minutes: <input type="text" id="mns" name="mns" value="0" size="3" maxlength="3" /> &nbsp; &nbsp; Seconds: <input type="text" id="scs" name="scs" value="0" size="2" maxlength="2" /><br/>
+<input type="button" id="btnct" value="START" onclick="countdown(yr,m,d,hr,min,sec)"/>
+<br>
+<br>
+<br>
+</div>
+Countdown Timer: &nbsp; <span id="showmns">00</span>:<span id="showscs">00</span>
+<script type="text/javascript"><!--
+   
+var ctmnts = 0;
+var ctsecs = 0;
+var startchr = 0;       
+
+function countdownTimer() {
+  
+  if(startchr == 0 && document.getElementById('mns') && document.getElementById('scs')) {
+    ctmnts = parseInt(document.getElementById('mns').value) + 0;
+    ctsecs = parseInt(document.getElementById('scs').value) * 1;   
+    if(isNaN(ctmnts)) ctmnts = 0;
+    if(isNaN(ctsecs)) ctsecs = 0;
+    document.getElementById('mns').value = ctmnts;
+    document.getElementById('scs').value = ctsecs;
+    startchr = 1;
+    document.getElementById('btnct').setAttribute('disabled', 'disabled');     // disable the button
+  } 
+  if(ctmnts==0 && ctsecs==0) {
+    startchr = 0;
+    document.getElementById('btnct').removeAttribute('');   
+    return false;
+  }
+  else {
+    ctsecs--;
+    if(ctsecs < 0) {
+      if(ctmnts > 0) {
+        ctsecs = 59;
+        ctmnts--;
+      }
+      else {
+        ctsecs = 0;
+        ctmnts = 0;
+      }
+    }
+  }
+  document.getElementById('showmns').innerHTML = ctmnts;
+  document.getElementById('showscs').innerHTML = ctsecs;
+  setTimeout('countdownTimer()', 1000);
+}
+</script>
+<br>
+<br>
+<br>
+
+
+Enter Date<input type = "text" maxlength = "10" id ="Enter Year" value ="MM/DD/YYYY" /><br>
+			<input type="submit"  onclick = "javascript:doOperaion()" value="Submit" class="big green" />
+						<input onclick = "javascript:clear()" type="submit" value="Cancel" class="big mustard" /> 
+
+
+</body>
+</html>
